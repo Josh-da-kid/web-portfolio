@@ -16,6 +16,8 @@ export const sectionRefs = writable<SectionRefs>({
 
 export const lenisInstance = writable<any>(null);
 
+export const isModalOpen = writable<boolean>(false);
+
 export const cursorLabel = writable<string>('You');
 
 export const activeElement = writable<string>('');

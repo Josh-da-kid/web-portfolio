@@ -9,7 +9,7 @@
 	import Projects from '$lib/components/Projects.svelte';
 	import Contact from '$lib/components/Contact.svelte';
 
-	import { lenisInstance, isLoaded, currentSection } from '$lib/stores';
+	import { lenisInstance, isLoaded, currentSection, isModalOpen } from '$lib/stores';
 
 	onMount(async () => {
 		const gsapModule = await import('gsap');
@@ -43,6 +43,15 @@
 		requestAnimationFrame(raf);
 
 		isLoaded.set(true);
+
+		// Subscribe to isModalOpen to stop/start lenis
+		const unsubscribe = isModalOpen.subscribe((isOpen: boolean) => {
+			if (isOpen) {
+				lenis.stop();
+			} else {
+				lenis.start();
+			}
+		});
 
 		gsap.ticker.add((time) => {
 			lenis.raf(time);

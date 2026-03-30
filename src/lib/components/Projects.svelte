@@ -1,10 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { currentSection } from '$lib/stores';
+	import { browser } from '$app/environment';
+	import { currentSection, lenisInstance, isModalOpen } from '$lib/stores';
 	import type { Project } from '$lib/types';
 
 	let projectsRef: HTMLElement;
 	let expandedProject: Project | null = $state(null);
+	let lenis: any;
+
+	// Get lenis instance from store
+	lenisInstance.subscribe((value) => {
+		lenis = value;
+	});
+
+	// Prevent body scroll when modal is open
+	$effect(() => {
+		if (!browser) return;
+
+		if (expandedProject) {
+			if (lenis) lenis.stop();
+			isModalOpen.set(true);
+		} else {
+			if (lenis) lenis.start();
+			isModalOpen.set(false);
+		}
+	});
 	let gsapModule: typeof import('gsap').default;
 
 	const projects: Project[] = [
@@ -181,7 +201,7 @@
 		<!-- Section header -->
 		<div class="mb-20 md:mb-32">
 			<span
-				class="projects-label font-manrope mb-4 block text-sm font-medium tracking-widest text-cyan-400 uppercase"
+				class="projects-label mb-4 block font-manrope text-sm font-medium tracking-widest text-cyan-400 uppercase"
 			>
 				Projects
 			</span>
@@ -193,9 +213,12 @@
 		<!-- Projects grid -->
 		<div class="projects-grid grid gap-8 md:grid-cols-2">
 			{#each projects as project, index}
-				<button
-					class="project-card group relative overflow-hidden rounded-3xl bg-white/[0.02] text-left transition-all duration-500 hover:bg-white/[0.05]"
+				<div
+					class="project-card group relative cursor-pointer overflow-hidden rounded-3xl bg-white/[0.02] text-left transition-all duration-500 hover:bg-white/[0.05]"
 					onclick={() => openProject(project)}
+					role="button"
+					tabindex="0"
+					onkeydown={(e) => e.key === 'Enter' && openProject(project)}
 				>
 					<!-- Image container -->
 					<div class="relative aspect-[4/3] overflow-hidden">
@@ -220,11 +243,11 @@
 					<!-- Content -->
 					<div class="relative p-8">
 						<h3
-							class="font-syne mb-3 text-2xl font-bold text-white transition-colors duration-300 group-hover:text-cyan-400"
+							class="mb-3 font-syne text-2xl font-bold text-white transition-colors duration-300 group-hover:text-cyan-400"
 						>
 							{project.title}
 						</h3>
-						<p class="font-space mb-6 text-base leading-relaxed text-gray-400">
+						<p class="mb-6 font-space text-base leading-relaxed text-gray-400">
 							{project.description}
 						</p>
 
@@ -232,18 +255,26 @@
 						<div class="flex flex-wrap gap-2">
 							{#each project.tech as tech}
 								<span
-									class="font-manrope rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-gray-400"
+									class="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-manrope text-xs text-gray-400"
 								>
 									{tech}
 								</span>
 							{/each}
 						</div>
 
-						<!-- Arrow -->
-						<div
-							class="absolute right-8 bottom-8 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 transition-all duration-300 group-hover:translate-x-1 group-hover:border-cyan-400 group-hover:bg-cyan-400/20"
+						<!-- Arrow - links to demo -->
+						<a
+							href={project.liveUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="group arrow-link absolute right-8 bottom-8 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 transition-all duration-300 hover:translate-x-1 hover:border-cyan-400 hover:bg-cyan-400/20"
 						>
-							<svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg
+								class="group-hover:arrow-bounce h-5 w-5 text-white transition-transform"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -251,7 +282,7 @@
 									d="M17 8l4 4m0 0l-4 4m4-4H3"
 								></path>
 							</svg>
-						</div>
+						</a>
 					</div>
 
 					<!-- Hover glow -->
@@ -260,7 +291,7 @@
 						style="background: radial-gradient(circle at 50% 50%, {project.color}10 0%, transparent 70%)"
 						class:opacity-100={false}
 					></div>
-				</button>
+				</div>
 			{/each}
 		</div>
 	</div>
@@ -279,24 +310,9 @@
 			></button>
 
 			<div
-				class="project-modal relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-dark"
+				class="project-modal relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-3xl border border-white/10 bg-dark"
+				onwheel={(e) => e.stopPropagation()}
 			>
-				<!-- Close button -->
-				<button
-					class="absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-white/20"
-					onclick={closeProject}
-					aria-label="Close"
-				>
-					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M6 18L18 6M6 6l12 12"
-						></path>
-					</svg>
-				</button>
-
 				<!-- Image -->
 				<div class="relative aspect-video">
 					<img
@@ -305,29 +321,45 @@
 						class="h-full w-full object-cover"
 					/>
 					<div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+
+					<!-- Close button (X) -->
+					<button
+						class="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white transition-colors hover:bg-white/20"
+						onclick={closeProject}
+						aria-label="Close"
+					>
+						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							></path>
+						</svg>
+					</button>
 				</div>
 
 				<!-- Content -->
-				<div class="p-8 md:p-12">
-					<h3 class="font-syne mb-6 text-4xl font-bold text-white md:text-5xl">
+				<div class="p-6 md:p-10 lg:p-12">
+					<h3 class="mb-3 font-syne text-3xl font-bold text-white md:text-4xl lg:text-5xl">
 						{expandedProject.title}
 					</h3>
 
-					<p class="font-space mb-8 text-lg leading-relaxed text-gray-300">
+					<p class="mb-6 font-space text-base leading-relaxed text-gray-300 md:text-lg lg:text-xl">
 						{expandedProject.description}
 					</p>
 
 					<!-- Tech stack -->
-					<div class="mb-8">
+					<div class="mb-6 md:mb-8">
 						<h4
-							class="font-manrope mb-4 text-sm font-medium tracking-widest text-gray-500 uppercase"
+							class="mb-3 font-manrope text-sm font-medium tracking-widest text-gray-500 uppercase md:mb-4"
 						>
 							Technologies
 						</h4>
-						<div class="flex flex-wrap gap-3">
+						<div class="flex flex-wrap gap-2 md:gap-3">
 							{#each expandedProject.tech as tech}
 								<span
-									class="font-manrope rounded-full border px-5 py-2 text-sm"
+									class="rounded-full border px-3 py-1.5 font-manrope text-xs md:px-5 md:py-2 md:text-sm"
 									style="border-color: {expandedProject.color}40; background: {expandedProject.color}10; color: {expandedProject.color}"
 								>
 									{tech}
@@ -390,5 +422,32 @@
 
 	.font-manrope {
 		font-family: 'Manrope', sans-serif;
+	}
+
+	@keyframes arrow-bounce {
+		0%,
+		100% {
+			transform: translateX(0);
+		}
+		50% {
+			transform: translateX(4px);
+		}
+	}
+
+	.arrow-link:hover .arrow-bounce {
+		animation: arrow-bounce 0.5s ease-in-out infinite;
+	}
+
+	.project-modal::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.project-modal::-webkit-scrollbar-track {
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.project-modal::-webkit-scrollbar-thumb {
+		background: linear-gradient(180deg, #00ffff, #ff00ff);
+		border-radius: 3px;
 	}
 </style>
