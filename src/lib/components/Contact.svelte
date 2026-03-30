@@ -506,7 +506,7 @@
 		<!-- Footer -->
 		<footer class="mt-24 border-t border-white/10 pt-12">
 			<div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-				<p class="font-manrope text-sm text-gray-500">© 2024 Andrew Ubana. All rights reserved.</p>
+				<p class="font-manrope text-sm text-gray-500">© 2024 Josiah Andrew. All rights reserved.</p>
 				<p class="font-manrope text-sm text-gray-500">
 					Built with
 					<span class="text-cyan-400">Svelte</span>,
