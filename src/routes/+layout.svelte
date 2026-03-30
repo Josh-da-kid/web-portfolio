@@ -8,7 +8,7 @@
 		currentSection,
 		sectionDescriptions
 	} from '$lib/stores';
-	import { gsap } from 'gsap';
+	import gsap from 'gsap';
 	import { onDestroy } from 'svelte';
 
 	let { children } = $props();
