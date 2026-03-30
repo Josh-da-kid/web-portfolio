@@ -188,7 +188,7 @@
 
 <svelte:window onmousemove={handleMouseMove} onscroll={handleScroll} />
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head><link rel="icon" href="favicon.png" /></svelte:head>
 
 <!-- Cursor Glow Effect -->
 <div class="cursor-glow" style="left: {cursorX}px; top: {cursorY}px;"></div>
