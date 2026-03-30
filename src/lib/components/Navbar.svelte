@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { gsap } from 'gsap';
+	import gsap from 'gsap';
 	import { currentSection, lenisInstance } from '$lib/stores';
 
 	let isScrolled = $state(false);
