@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import gsap from 'gsap';
-	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { currentSection } from '$lib/stores';
 	import type { Project } from '$lib/types';
 
-	gsap.registerPlugin(ScrollTrigger);
-
 	let projectsRef: HTMLElement;
 	let expandedProject: Project | null = $state(null);
+	let gsapModule: typeof import('gsap').default;
 
 	const projects: Project[] = [
 		{
@@ -57,9 +54,14 @@
 		}
 	];
 
-	onMount(() => {
+	onMount(async () => {
+		const gsapImport = await import('gsap');
+		gsapModule = gsapImport.default;
+		const { ScrollTrigger } = await import('gsap/dist/ScrollTrigger');
+		gsapModule.registerPlugin(ScrollTrigger);
+
 		if (projectsRef) {
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.projects-label',
 				{ opacity: 0, y: 20 },
 				{
@@ -73,7 +75,7 @@
 				}
 			);
 
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.projects-title',
 				{ opacity: 0, y: 40 },
 				{
@@ -87,7 +89,7 @@
 				}
 			);
 
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.project-card',
 				{ opacity: 0, y: 60 },
 				{
@@ -123,13 +125,13 @@
 		expandedProject = project;
 		document.body.style.overflow = 'hidden';
 
-		gsap.fromTo(
+		gsapModule?.fromTo(
 			'.project-overlay',
 			{ opacity: 0 },
 			{ opacity: 1, duration: 0.4, ease: 'power2.out' }
 		);
 
-		gsap.fromTo(
+		gsapModule?.fromTo(
 			'.project-modal',
 			{ opacity: 0, y: 50, scale: 0.95 },
 			{ opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out', delay: 0.1 }
@@ -137,7 +139,7 @@
 	}
 
 	function closeProject() {
-		gsap.to('.project-modal', {
+		gsapModule?.to('.project-modal', {
 			opacity: 0,
 			y: 30,
 			scale: 0.95,
@@ -145,7 +147,7 @@
 			ease: 'power2.in'
 		});
 
-		gsap.to('.project-overlay', {
+		gsapModule?.to('.project-overlay', {
 			opacity: 0,
 			duration: 0.3,
 			onComplete: () => {

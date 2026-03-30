@@ -5,6 +5,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+	optimizeDeps: {
+		include: ['gsap']
+	},
+	ssr: {
+		noExternal: ['gsap']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [

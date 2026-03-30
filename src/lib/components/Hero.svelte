@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import gsap from 'gsap';
+	import { browser } from '$app/environment';
 	import * as THREE from 'three';
 	import {
 		createScene,
@@ -31,6 +31,7 @@
 	let lights: THREE.Group;
 	let animationId: number;
 	let clock: THREE.Clock;
+	let gsapModule: typeof import('gsap').default;
 
 	const developerName = 'Josiah Andrew';
 	const firstName = developerName.split(' ')[0];
@@ -43,8 +44,14 @@
 	let isHoveringLast = $state(false);
 	let hasHovered = $state(false);
 
-	onMount(() => {
-		if (!canvasRef) return;
+	onMount(async () => {
+		if (!browser || !canvasRef) return;
+
+		const gsapImport = await import('gsap');
+		gsapModule = gsapImport.default;
+		const gsap = gsapImport.default;
+		const { ScrollTrigger } = await import('gsap/dist/ScrollTrigger');
+		gsap.registerPlugin(ScrollTrigger);
 
 		// Initialize Three.js scene
 		scene = createScene();
@@ -64,7 +71,7 @@
 		clock = new THREE.Clock();
 
 		// Enhanced entrance animation with staggered letters
-		const tl = gsap.timeline({ delay: 0.2 });
+		const tl = gsapModule.timeline({ delay: 0.2 });
 
 		// Animate each letter of first name with 3D flip
 		tl.fromTo(
@@ -132,7 +139,7 @@
 			);
 
 		// Animate particles rotation
-		gsap.fromTo(
+		gsapModule?.fromTo(
 			particles.rotation,
 			{ y: 0 },
 			{ y: Math.PI * 2, duration: 60, repeat: -1, ease: 'none' }
@@ -206,7 +213,7 @@
 		cursorLabel.set('Cool right?');
 		console.log('Label set to: Cool right?');
 
-		gsap.to('.first-name span span', {
+		gsapModule?.to('.first-name span span', {
 			y: -15,
 			scale: 1.1,
 			textShadow: '0 0 30px rgba(255,255,255,0.5)',
@@ -221,7 +228,7 @@
 		cursorLabel.set('Hover over my name');
 		activeElement.set('');
 
-		gsap.to('.first-name span span', {
+		gsapModule?.to('.first-name span span', {
 			y: 0,
 			scale: 1,
 			textShadow: '0 0 0px rgba(255,255,255,0)',
@@ -237,7 +244,7 @@
 		activeElement.set('hero-name');
 		cursorLabel.set('Cool right?');
 
-		gsap.to('.last-name > span:first-child span', {
+		gsapModule?.to('.last-name > span:first-child span', {
 			y: -15,
 			scale: 1.1,
 			duration: 0.4,
@@ -245,7 +252,7 @@
 			ease: 'power2.out'
 		});
 
-		gsap.fromTo(
+		gsapModule?.fromTo(
 			'.glitch-layer',
 			{ opacity: 0, x: -5 },
 			{
@@ -262,7 +269,7 @@
 		cursorLabel.set('Hover over my name');
 		activeElement.set('');
 
-		gsap.to('.last-name > span:first-child span', {
+		gsapModule?.to('.last-name > span:first-child span', {
 			y: 0,
 			scale: 1,
 			duration: 0.4,

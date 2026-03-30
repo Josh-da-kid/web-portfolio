@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { browser } from '$app/environment';
 	import {
 		cursorLabel,
 		hasInteracted,
@@ -8,8 +9,7 @@
 		currentSection,
 		sectionDescriptions
 	} from '$lib/stores';
-	import gsap from 'gsap';
-	import { onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	let { children } = $props();
 
@@ -18,6 +18,7 @@
 	let labelElement: HTMLElement;
 	let labelValue = 'You';
 	let labelDescription = '';
+	let gsapModule: typeof import('gsap').default;
 	let labelColor = '#ffffff';
 	let hasScrolledValue = $state(false);
 	let currentSectionValue = $state('hero');
@@ -65,6 +66,13 @@
 		interactUnsubscribe();
 	});
 
+	onMount(async () => {
+		if (browser) {
+			const gsapImport = await import('gsap');
+			gsapModule = gsapImport.default;
+		}
+	});
+
 	function handleMouseMove(e: MouseEvent) {
 		cursorX = e.clientX;
 		cursorY = e.clientY;
@@ -107,9 +115,9 @@
 	// Reactive effect when labelValue changes
 	$effect(() => {
 		const currentLabel = labelValue;
-		if (labelElement) {
+		if (labelElement && gsapModule) {
 			// Jaw-dropping animation
-			gsap.fromTo(
+			gsapModule.fromTo(
 				labelElement,
 				{ scale: 0.1, opacity: 0, y: -50, rotation: -25 },
 				{ scale: 1, opacity: 1, y: 0, rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)' }
@@ -117,7 +125,7 @@
 
 			// Determine colors based on label
 			if (currentLabel === 'Cool right?') {
-				gsap.to(labelElement, {
+				gsapModule.to(labelElement, {
 					backgroundColor: '#00ffff',
 					color: '#000',
 					boxShadow:
@@ -125,7 +133,7 @@
 					duration: 0.4
 				});
 				// Pulse effect
-				gsap.to(labelElement, {
+				gsapModule.to(labelElement, {
 					scale: 1.1,
 					duration: 0.3,
 					yoyo: true,
@@ -133,49 +141,49 @@
 					ease: 'power2.inOut'
 				});
 			} else if (currentLabel === 'Hover over my name') {
-				gsap.to(labelElement, {
+				gsapModule.to(labelElement, {
 					backgroundColor: '#ff00ff',
 					color: '#fff',
 					boxShadow: '0 0 60px rgba(255,0,255,1), 0 0 120px rgba(255,0,255,0.8)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'Scroll down ↓') {
-				gsap.to(labelElement, {
+				gsapModule.to(labelElement, {
 					backgroundColor: '#1a1a2e',
 					color: '#fff',
 					boxShadow: '0 0 40px rgba(255,255,255,0.5), 0 0 80px rgba(255,255,255,0.3)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'Welcome') {
-				gsap.to(labelElement, {
+				gsapModule?.to(labelElement, {
 					backgroundColor: '#00ffff',
 					color: '#000',
 					boxShadow: '0 0 60px rgba(0,255,255,1), 0 0 120px rgba(0,255,255,0.6)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'About Me') {
-				gsap.to(labelElement, {
+				gsapModule?.to(labelElement, {
 					backgroundColor: '#ff00ff',
 					color: '#fff',
 					boxShadow: '0 0 60px rgba(255,0,255,1), 0 0 120px rgba(255,0,255,0.6)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'Projects') {
-				gsap.to(labelElement, {
+				gsapModule?.to(labelElement, {
 					backgroundColor: '#00ff88',
 					color: '#000',
 					boxShadow: '0 0 60px rgba(0,255,136,1), 0 0 120px rgba(0,255,136,0.6)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'Contact') {
-				gsap.to(labelElement, {
+				gsapModule?.to(labelElement, {
 					backgroundColor: '#ff8800',
 					color: '#000',
 					boxShadow: '0 0 60px rgba(255,136,0,1), 0 0 120px rgba(255,136,0,0.6)',
 					duration: 0.4
 				});
 			} else if (currentLabel === 'You') {
-				gsap.to(labelElement, {
+				gsapModule?.to(labelElement, {
 					backgroundColor: '#ffffff',
 					color: '#000000',
 					boxShadow: '0 0 20px rgba(255,255,255,0.8), 0 2px 20px rgba(0,0,0,0.5)',

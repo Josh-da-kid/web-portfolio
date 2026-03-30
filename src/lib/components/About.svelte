@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import gsap from 'gsap';
-	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import { currentSection, cursorPosition } from '$lib/stores';
 	import type { Skill } from '$lib/types';
-
-	gsap.registerPlugin(ScrollTrigger);
 
 	let aboutRef: HTMLElement;
 	let hoveredSkill: number | null = $state(null);
@@ -21,7 +17,13 @@
 		{ name: 'GraphQL', icon: '◼️', level: 80, color: '#E10098' }
 	];
 
-	onMount(() => {
+	onMount(async () => {
+		const gsapModule = await import('gsap');
+		const gsap = gsapModule.default;
+		// @ts-ignore - ScrollTrigger is available on the gsap object
+		const ScrollTrigger = gsap.ScrollTrigger || (await import('gsap')).ScrollTrigger;
+		gsap.registerPlugin(ScrollTrigger);
+
 		// GSAP scroll-triggered animations
 		if (aboutRef) {
 			gsap.fromTo(

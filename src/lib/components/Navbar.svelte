@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import gsap from 'gsap';
+	import { browser } from '$app/environment';
 	import { currentSection, lenisInstance } from '$lib/stores';
 
 	let isScrolled = $state(false);
@@ -27,7 +27,9 @@
 		isMobileMenuOpen = false;
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		const gsapModule = await import('gsap');
+		const gsap = gsapModule.default;
 		gsap.fromTo(
 			navRef,
 			{ y: -100, opacity: 0 },

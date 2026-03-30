@@ -16,6 +16,10 @@
 	--font-family-sans: 'Manrope', system-ui, -apple-system, sans-serif;
 	--font-family-display: 'Syne', system-ui, sans-serif;
 	--font-family-mono: 'Space Grotesk', monospace;
+
+	--font-manrope: 'Manrope', system-ui, -apple-system, sans-serif;
+	--font-syne: 'Syne', system-ui, sans-serif;
+	--font-space: 'Space Grotesk', monospace;
 }
 
 * {

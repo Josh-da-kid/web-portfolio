@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import gsap from 'gsap';
-	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import * as THREE from 'three';
 	import { currentSection, cursorPosition } from '$lib/stores';
-
-	gsap.registerPlugin(ScrollTrigger);
 
 	let contactRef: HTMLElement;
 	let canvasRef: HTMLCanvasElement;
@@ -20,6 +16,7 @@
 	let particles: THREE.Points;
 	let renderer: THREE.WebGLRenderer;
 	let animationId: number;
+	let gsapModule: typeof import('gsap').default;
 
 	const socialLinks = [
 		{
@@ -44,11 +41,16 @@
 		}
 	];
 
-	onMount(() => {
+	onMount(async () => {
+		const gsapImport = await import('gsap');
+		gsapModule = gsapImport.default;
+		const { ScrollTrigger } = await import('gsap/dist/ScrollTrigger');
+		gsapModule.registerPlugin(ScrollTrigger);
+
 		initParticles();
 
 		if (contactRef) {
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.contact-label',
 				{ opacity: 0, y: 20 },
 				{
@@ -62,7 +64,7 @@
 				}
 			);
 
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.contact-title',
 				{ opacity: 0, y: 40 },
 				{
@@ -76,7 +78,7 @@
 				}
 			);
 
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.contact-form',
 				{ opacity: 0, y: 40 },
 				{
@@ -91,7 +93,7 @@
 				}
 			);
 
-			gsap.fromTo(
+			gsapModule.fromTo(
 				'.social-link',
 				{ opacity: 0, y: 20 },
 				{
@@ -190,15 +192,15 @@
 	}
 
 	function handleFocus(fieldId: string) {
-		gsap.to(`#${fieldId}-label`, { y: -28, scale: 0.85, color: '#00ffff', duration: 0.3 });
-		gsap.to(`#${fieldId}-border`, { scaleX: 1, opacity: 1, duration: 0.3 });
+		gsapModule?.to(`#${fieldId}-label`, { y: -28, scale: 0.85, color: '#00ffff', duration: 0.3 });
+		gsapModule?.to(`#${fieldId}-border`, { scaleX: 1, opacity: 1, duration: 0.3 });
 	}
 
 	function handleBlur(fieldId: string, value: string) {
 		if (!value) {
-			gsap.to(`#${fieldId}-label`, { y: 0, scale: 1, color: '#6b7280', duration: 0.3 });
+			gsapModule?.to(`#${fieldId}-label`, { y: 0, scale: 1, color: '#6b7280', duration: 0.3 });
 		}
-		gsap.to(`#${fieldId}-border`, { scaleX: 0, opacity: 0.3, duration: 0.3 });
+		gsapModule?.to(`#${fieldId}-border`, { scaleX: 0, opacity: 0.3, duration: 0.3 });
 	}
 
 	async function handleSubmit(event: Event) {
