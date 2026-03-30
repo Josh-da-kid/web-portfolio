@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { gsap } from 'gsap';
+	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 	import * as THREE from 'three';
 	import { currentSection, cursorPosition } from '$lib/stores';
