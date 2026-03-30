@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Lenis from 'lenis';
-	import { gsap } from 'gsap';
+	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 	import Navbar from '$lib/components/Navbar.svelte';
