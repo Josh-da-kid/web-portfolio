@@ -32,7 +32,7 @@
 		lenisInstance.set(lenis);
 
 		lenis.on('scroll', (e) => {
-			currentSection.set(e.direction);
+			// Don't overwrite currentSection - let IntersectionObservers handle section detection
 		});
 
 		function raf(time: number) {

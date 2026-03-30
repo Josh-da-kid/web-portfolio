@@ -236,7 +236,7 @@
 		<!-- Section header -->
 		<div class="mb-20 md:mb-24">
 			<span
-				class="contact-label font-manrope mb-4 block text-sm font-medium tracking-widest text-cyan-400 uppercase"
+				class="contact-label mb-4 block font-manrope text-sm font-medium tracking-widest text-cyan-400 uppercase"
 			>
 				Contact
 			</span>
@@ -267,7 +267,7 @@
 							/>
 							<label
 								id="name-label"
-								class="font-space pointer-events-none absolute top-4 left-0 text-gray-500 transition-all duration-300"
+								class="pointer-events-none absolute top-4 left-0 font-space text-gray-500 transition-all duration-300"
 							>
 								Your Name
 							</label>
@@ -291,7 +291,7 @@
 							/>
 							<label
 								id="email-label"
-								class="font-space pointer-events-none absolute top-4 left-0 text-gray-500 transition-all duration-300"
+								class="pointer-events-none absolute top-4 left-0 font-space text-gray-500 transition-all duration-300"
 							>
 								Your Email
 							</label>
@@ -315,7 +315,7 @@
 							></textarea>
 							<label
 								id="message-label"
-								class="font-space pointer-events-none absolute top-4 left-0 text-gray-500 transition-all duration-300"
+								class="pointer-events-none absolute top-4 left-0 font-space text-gray-500 transition-all duration-300"
 							>
 								Your Message
 							</label>
@@ -330,7 +330,7 @@
 					<button
 						type="submit"
 						disabled={isSubmitting}
-						class="group to-magenta-500 font-syne relative mt-12 w-full overflow-hidden rounded-full bg-gradient-to-r from-cyan-500 py-6 text-lg font-semibold text-white transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,255,255,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
+						class="group to-magenta-500 relative mt-12 w-full overflow-hidden rounded-full bg-gradient-to-r from-cyan-500 py-6 font-syne text-lg font-semibold text-white transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,255,255,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						<span class="relative z-10 flex items-center justify-center gap-3">
 							{#if isSubmitting}
@@ -397,7 +397,7 @@
 									</svg>
 								</div>
 								<h3 class="font-syne text-xl font-bold text-white">Message Sent!</h3>
-								<p class="font-space mt-2 text-gray-400">I'll get back to you soon.</p>
+								<p class="mt-2 font-space text-gray-400">I'll get back to you soon.</p>
 							</div>
 						</div>
 					{/if}
@@ -427,8 +427,8 @@
 							</svg>
 						</div>
 						<div>
-							<p class="font-manrope mb-1 text-sm text-gray-500">Email</p>
-							<p class="font-space text-xl text-white">hello@example.com</p>
+							<p class="mb-1 font-manrope text-sm text-gray-500">Email</p>
+							<p class="font-space text-xl text-white">carmenjosh84@gmail.com</p>
 						</div>
 					</div>
 
@@ -457,15 +457,15 @@
 							</svg>
 						</div>
 						<div>
-							<p class="font-manrope mb-1 text-sm text-gray-500">Location</p>
-							<p class="font-space text-xl text-white">San Francisco, CA</p>
+							<p class="mb-1 font-manrope text-sm text-gray-500">Location</p>
+							<p class="font-space text-xl text-white">Cross River, Nigeria</p>
 						</div>
 					</div>
 				</div>
 
 				<!-- Social links -->
 				<div class="pt-8">
-					<h3 class="font-manrope mb-8 text-sm font-medium tracking-widest text-gray-500 uppercase">
+					<h3 class="mb-8 font-manrope text-sm font-medium tracking-widest text-gray-500 uppercase">
 						Connect
 					</h3>
 					<div class="flex gap-6">

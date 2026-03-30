@@ -7,14 +7,19 @@
 	let hoveredSkill: number | null = $state(null);
 
 	const skills: Skill[] = [
-		{ name: 'React', icon: '⚛️', level: 95, color: '#61DAFB' },
-		{ name: 'Svelte', icon: '🔥', level: 90, color: '#FF3E00' },
-		{ name: 'TypeScript', icon: '💎', level: 92, color: '#3178C6' },
-		{ name: 'Three.js', icon: '🎮', level: 85, color: '#000000' },
-		{ name: 'GSAP', icon: '✨', level: 88, color: '#88CE02' },
-		{ name: 'Tailwind', icon: '🌊', level: 95, color: '#06B6D4' },
-		{ name: 'Node.js', icon: '🟢', level: 85, color: '#339933' },
-		{ name: 'GraphQL', icon: '◼️', level: 80, color: '#E10098' }
+		{ name: 'Svelte', icon: 'S', level: 90, color: '#FF3E00' },
+		{ name: 'CSS', icon: 'CSS', level: 95, color: '#61DAFB' },
+		{ name: 'TypeScript', icon: 'TS', level: 92, color: '#3178C6' },
+		{ name: 'Three.js', icon: '3D', level: 85, color: '#000000' },
+		{ name: 'GSAP', icon: 'G', level: 88, color: '#88CE02' },
+		{ name: 'Tailwind', icon: 'TW', level: 95, color: '#06B6D4' },
+		{ name: 'Node.js', icon: 'N', level: 85, color: '#339933' },
+		{
+			name: 'HTML 5',
+			icon: 'H',
+			level: 80,
+			color: '#f03413'
+		}
 	];
 
 	onMount(async () => {
@@ -120,7 +125,7 @@
 		<!-- Section header -->
 		<div class="mb-20 md:mb-32">
 			<span
-				class="about-label font-manrope mb-4 block text-sm font-medium tracking-widest text-cyan-400 uppercase"
+				class="about-label mb-4 block font-manrope text-sm font-medium tracking-widest text-cyan-400 uppercase"
 			>
 				About
 			</span>
@@ -135,7 +140,7 @@
 		<!-- Bio and stats -->
 		<div class="mb-24 grid gap-12 md:grid-cols-2 md:gap-24">
 			<div class="about-text">
-				<p class="font-space mb-6 text-xl leading-relaxed text-gray-300 md:text-2xl">
+				<p class="mb-6 font-space text-xl leading-relaxed text-gray-300 md:text-2xl">
 					I'm a creative frontend developer specializing in building immersive, interactive web
 					experiences that push the boundaries of what's possible in the browser.
 				</p>
@@ -147,16 +152,16 @@
 				<!-- Stats -->
 				<div class="mt-12 flex gap-12">
 					<div>
-						<span class="font-syne text-4xl font-bold text-white">5+</span>
-						<p class="font-manrope mt-1 text-sm text-gray-500">Years Experience</p>
-					</div>
-					<div>
-						<span class="font-syne text-4xl font-bold text-white">50+</span>
-						<p class="font-manrope mt-1 text-sm text-gray-500">Projects</p>
+						<span class="font-syne text-4xl font-bold text-white">2+</span>
+						<p class="mt-1 font-manrope text-sm text-gray-500">Years Experience</p>
 					</div>
 					<div>
 						<span class="font-syne text-4xl font-bold text-white">30+</span>
-						<p class="font-manrope mt-1 text-sm text-gray-500">Clients</p>
+						<p class="mt-1 font-manrope text-sm text-gray-500">Projects</p>
+					</div>
+					<div>
+						<span class="font-syne text-4xl font-bold text-white">10+</span>
+						<p class="mt-1 font-manrope text-sm text-gray-500">Clients</p>
 					</div>
 				</div>
 			</div>
@@ -179,7 +184,7 @@
 
 		<!-- Skills -->
 		<div>
-			<h3 class="font-manrope mb-12 text-lg font-medium tracking-widest text-gray-500 uppercase">
+			<h3 class="mb-12 font-manrope text-lg font-medium tracking-widest text-gray-500 uppercase">
 				Technical Skills
 			</h3>
 			<div class="skills-grid grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
@@ -196,7 +201,11 @@
 						></div>
 
 						<div class="relative z-10">
-							<span class="mb-4 block text-3xl">{skill.icon}</span>
+							<span
+								class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg text-lg font-bold"
+								style="background: {skill.color}20; color: {skill.color}; border: 1px solid {skill.color}40"
+								>{skill.icon}</span
+							>
 							<h4 class="font-syne text-lg font-semibold text-white">{skill.name}</h4>
 							<div class="mt-3 h-1 w-full overflow-hidden rounded-full bg-gray-800">
 								<div

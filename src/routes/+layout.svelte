@@ -31,12 +31,18 @@
 	// Track current section - this should update based on IntersectionObserver
 	const sectionUnsubscribe = currentSection.subscribe((section) => {
 		currentSectionValue = section;
-		if (section && hasScrolledValue && section !== 'hero') {
+		if (section && section !== 'hero') {
 			const desc = sectionDescriptions[section];
 			if (desc) {
 				labelValue = desc.label;
 				labelDescription = desc.description;
 				labelColor = desc.color;
+			}
+		} else if (section === 'hero') {
+			// Reset to default hero message
+			if (labelValue !== 'Hover over my name' && labelValue !== 'Cool right?') {
+				labelValue = 'Hover over my name';
+				labelDescription = '';
 			}
 		}
 	});
@@ -70,6 +76,45 @@
 		if (browser) {
 			const gsapImport = await import('gsap');
 			gsapModule = gsapImport.default;
+
+			// Set up IntersectionObserver to track visible section
+			const sections = ['hero', 'about', 'projects', 'contact'];
+
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							const sectionId = entry.target.id;
+
+							// Update label based on section
+							if (sectionId === 'hero') {
+								labelValue = 'Hover over my name';
+								labelDescription = '';
+							} else if (sectionId === 'about') {
+								labelValue = 'About Me';
+								labelDescription = 'Who I am & what I do';
+								labelColor = '#ff00ff';
+							} else if (sectionId === 'projects') {
+								labelValue = 'Projects';
+								labelDescription = "Things I've built";
+								labelColor = '#00ff88';
+							} else if (sectionId === 'contact') {
+								labelValue = 'Contact';
+								labelDescription = "Let's work together";
+								labelColor = '#ff8800';
+							}
+						}
+					});
+				},
+				{ threshold: 0.3 }
+			);
+
+			sections.forEach((id) => {
+				const el = document.getElementById(id);
+				if (el) observer.observe(el);
+			});
+
+			return () => observer.disconnect();
 		}
 	});
 
@@ -79,8 +124,6 @@
 	}
 
 	function handleScroll() {
-		if (!hasScrolledValue) return;
-
 		// Use IntersectionObserver-like logic to detect current section
 		const sectionElements = ['hero', 'about', 'projects', 'contact'];
 
@@ -94,7 +137,13 @@
 				if (isVisible) {
 					if (id === 'hero') {
 						// In hero, show prompt to scroll or hover message
-						if (labelValue === 'Scroll down ↓' || labelValue === 'You') {
+						if (
+							labelValue === 'Scroll down ↓' ||
+							labelValue === 'You' ||
+							labelValue === 'About Me' ||
+							labelValue === 'Projects' ||
+							labelValue === 'Contact'
+						) {
 							labelValue = 'Hover over my name';
 							labelDescription = '';
 						}
