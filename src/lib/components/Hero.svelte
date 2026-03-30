@@ -309,7 +309,7 @@
 	<div class="relative z-10 flex h-full flex-col items-center justify-center px-6">
 		<!-- Main heading with letter-by-letter animation -->
 		<h1
-			class="hero-title font-syne mb-8 text-center text-7xl leading-[0.9] font-bold tracking-tight md:text-[7rem] lg:text-[9rem] xl:text-[10rem]"
+			class="hero-title mb-8 text-center font-syne text-7xl leading-[0.9] font-bold tracking-tight md:text-[7rem] lg:text-[9rem] xl:text-[10rem]"
 		>
 			<!-- First Name - White -->
 			<span class="first-name perspective-1000 block">
@@ -346,7 +346,7 @@
 
 		<!-- Tagline -->
 		<p
-			class="hero-tagline font-space mb-12 max-w-xl text-center text-lg tracking-wide text-gray-400 md:text-xl"
+			class="hero-tagline mb-12 max-w-xl text-center font-space text-lg tracking-wide text-gray-400 md:text-xl"
 		>
 			{tagline}
 		</p>
@@ -384,10 +384,14 @@
 		</div>
 
 		<!-- Scroll indicator -->
-		<div class="scroll-indicator absolute bottom-12 left-1/2 z-10 -translate-x-1/2">
-			<div class="flex flex-col items-center gap-3">
-				<span class="font-manrope text-xs tracking-[0.2em] text-gray-500 uppercase">Scroll</span>
-				<div class="h-12 w-px overflow-hidden bg-gray-800">
+		<div
+			class="scroll-indicator absolute bottom-8 left-1/2 z-10 -translate-x-1/2 md:bottom-12 lg:-bottom-2"
+		>
+			<div class="flex flex-col items-center gap-2 md:gap-3">
+				<span class="font-manrope text-[10px] tracking-[0.2em] text-gray-500 uppercase md:text-xs"
+					>Scroll</span
+				>
+				<div class="h-8 w-px overflow-hidden bg-gray-800 md:h-12">
 					<div
 						class="animate-scroll-down to-magenta-400 h-full w-full bg-gradient-to-b from-cyan-400"
 					></div>
@@ -398,7 +402,7 @@
 		<!-- Hint - Interactive tooltip -->
 		{#if !isHoveringFirst && !isHoveringLast}
 			<p
-				class="font-manrope absolute top-1/2 right-4 -translate-y-1/2 animate-pulse text-sm text-gray-500"
+				class="absolute top-1/2 right-4 -translate-y-1/2 animate-pulse font-manrope text-sm text-gray-500"
 				style="writing-mode: vertical-rl; text-orientation: mixed;"
 			>
 				{hasHovered ? 'Hover again →' : 'Hover over my name →'}
